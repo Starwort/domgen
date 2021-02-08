@@ -1,16 +1,17 @@
 import json
 import typing
 from abc import ABCMeta, abstractmethod
+from textwrap import indent
 
 
 def transform(attributes: typing.Dict[str, typing.Any]) -> typing.Dict[str, str]:
-    """Transform `attributes` for serialisation
+    """Transform `attributes` for serialisation.
 
-    `attributes` is not mutated; a new dictionary is returned
+    `attributes` is not mutated; a new dictionary is returned.
 
     `classes`, if present, must be a `set` of classes to apply to the
     element. Empty strings will be removed from this set, so they are
-    useable to toggle a class with a boolean
+    useable to toggle a class with a boolean.
 
     Any attribute name with an underscore in it has its underscores
     transformed into hyphens (for ARIA, JavaScript `data-` attributes,
@@ -20,13 +21,13 @@ def transform(attributes: typing.Dict[str, typing.Any]) -> typing.Dict[str, str]
 
     Attribute values are serialised as JSON, and non-strings are then
     serialised as JSON again (to be XHTML-compliant and avoid breaking
-    arrays or objects as attribute values)
+    arrays or objects as attribute values).
     """
     new_attributes = {}
     classes = attributes.pop("classes", set())
     if classes:
-        new_attributes["class"] = " ".join(classes - {""})
-    for key, value in attributes:
+        attributes["class"] = " ".join(classes - {""})
+    for key, value in attributes.items():
         if not isinstance(value, str):
             # convert value to a string containing JSON
             value = json.dumps(value)
@@ -69,8 +70,8 @@ class Element(metaclass=ABCMeta):
         return self
 
     @abstractmethod
-    def serialise(self) -> str:
-        """Return minified HTML"""
+    def serialise(self, minify: bool = True) -> str:
+        """Return an HTML representation of the model"""
 
     @abstractmethod
     def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
@@ -83,15 +84,15 @@ class Element(metaclass=ABCMeta):
         Guaranteed to be called before set_content"""
 
     def __str__(self) -> str:
-        return self.serialise()
+        return self.serialise(minify=False)
 
 
 class TextElement(Element):
     __slots__ = ("content",)
     content: str
 
-    def serialise(self) -> str:
-        """Return minified HTML"""
+    def serialise(self, minify: bool = True) -> str:
+        """Return an HTML representation of the model"""
         return self.content
 
     def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
@@ -125,23 +126,26 @@ class Container(Element):
     content: typing.List["Element"]
     attributes: typing.Dict[str, typing.Any]
 
-    def serialise(self) -> str:
-        """Return minified HTML"""
+    def serialise(self, minify: bool = True) -> str:
+        """Return an HTML representation of the model"""
         return (
             "<"
             + self.tag
             + (
-                (
-                    " "
-                    + " ".join(
-                        f"{k}={json.dumps(v)}" for k, v in self.attributes.items()
-                    )
-                )
+                (" " + " ".join(f"{k}={v}" for k, v in self.attributes.items()))
                 if self.attributes
                 else ""
             )
             + ">"
-            + "".join(child.serialise() for child in self.content)
+            + ("" if minify else "\n")
+            + indent(
+                ("" if minify else "\n").join(
+                    child.serialise(minify=minify) for child in self.content
+                ),
+                "    ",
+                lambda i: not minify,
+            )
+            + ("" if minify else "\n")
             + f"</{self.tag}>"
         )
 
@@ -175,8 +179,8 @@ class Void(Element):
     tag: str
     attributes: typing.Dict[str, typing.Any]
 
-    def serialise(self) -> str:
-        """Return minified HTML"""
+    def serialise(self, minify: bool = True) -> str:
+        """Return an HTML representation of the model"""
         return (
             "<"
             + self.tag
@@ -214,6 +218,6 @@ class Component(Element):
     __slots__ = ("content",)
     content: Element
 
-    def serialise(self) -> str:
-        """Return minified HTML"""
-        return self.content.serialise()
+    def serialise(self, minify: bool = True) -> str:
+        """Return an HTML representation of the model"""
+        return self.content.serialise(minify=minify)

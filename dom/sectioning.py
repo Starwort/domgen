@@ -10,7 +10,9 @@ class ContactAddress(Container):
     __slots__ = ()
     tag = "address"
 
+
 Address = ContactAddress
+
 
 class ArticleContents(Container):
     """The HTML `<article>` element represents a self-contained
@@ -22,7 +24,9 @@ class ArticleContents(Container):
     __slots__ = ()
     tag = "article"
 
+
 Article = ArticleContents
+
 
 class Aside(Container):
     """The HTML `<aside>` element represents a portion of a document
@@ -115,12 +119,14 @@ class Heading6(Container):
     __slots__ = ()
     tag = "h6"
 
+
 H1 = Heading1
 H2 = Heading2
 H3 = Heading3
 H4 = Heading4
 H5 = Heading5
 H6 = Heading6
+
 
 class HeadingGroup(Container):
     """The HTML `<hgroup>` element represents a multi-level heading for
@@ -130,7 +136,9 @@ class HeadingGroup(Container):
     __slots__ = ()
     tag = "hgroup"
 
+
 HGroup = HeadingGroup
+
 
 class MainContent(Container):
     """The HTML `<main>` element represents the dominant content of the
@@ -142,7 +150,9 @@ class MainContent(Container):
     __slots__ = ()
     tag = "main"
 
+
 Main = MainContent
+
 
 class Navigation(Container):
     """The HTML `<nav>` element represents a section of a page whose
@@ -153,6 +163,7 @@ class Navigation(Container):
 
     __slots__ = ()
     tag = "nav"
+
 
 Nav = Navigation
 
@@ -176,8 +187,12 @@ class HTML(Container):
     __slots__ = ()
     tag = "html"
 
-    def serialise(self) -> str:
-        return "<!DOCTYPE html>" + super().serialise()
+    def serialise(self, minify: bool = True) -> str:
+        return (
+            "<!DOCTYPE html>"
+            + ("" if minify else "\n")
+            + super().serialise(minify=minify)
+        )
 
 
 class Head(Container):
