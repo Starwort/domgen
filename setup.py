@@ -1,11 +1,13 @@
 import setuptools
 
+import dom
+
 with open("README.md", "r") as file:
     long_description = file.read()
 
 setuptools.setup(
     name="domgen",
-    version="1.0.1",
+    version=dom.__version__,
     author="Starwort",
     description="A package for generating HTML and CSS",
     long_description=long_description,
