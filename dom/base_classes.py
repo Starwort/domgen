@@ -114,6 +114,9 @@ class TextElement(Element):
         if attributes:
             raise TypeError("Text content cannot have attributes")
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.content!r})"
+
 
 class Container(Element):
     """Base class for all container/non-void elements
@@ -205,6 +208,28 @@ class Void(Element):
             + "("
             + ", ".join(f"{k}={v}" for k, v in self.attributes.items())
             + ")"
+        )
+
+
+class ElementGroup(Element):
+    """A group of elements. Useful for creating Components"""
+
+    __slots__ = ("content",)
+    content: typing.List[Element]
+
+    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+        self.content = [
+            child if isinstance(child, Element) else TextElement(child)
+            for child in content
+        ]
+
+    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+        if attributes:
+            raise TypeError("Element groups cannot have attributes")
+
+    def serialise(self, minify: bool) -> str:
+        return ("" if minify else "\n").join(
+            child.serialise(minify=minify) for child in self.content
         )
 
 

@@ -1,3 +1,5 @@
+import functools
+
 from .base_classes import Container, Void
 
 
@@ -28,6 +30,8 @@ class ExternalResourceLink(Void):
 
 
 Link = ExternalResourceLink
+
+ExternalStyleSheet = functools.partial(ExternalResourceLink, rel="stylesheet")
 
 
 class Meta(Void):
