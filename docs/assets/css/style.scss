@@ -39,6 +39,7 @@ $dt-yellow: #f1fa8c;
 .highlight.highlight {
     background: $dt-gray-dark;
     color: $dt-gray-light;
+    font-style: normal;
 
     .hll,
     .s,
@@ -99,10 +100,6 @@ $dt-yellow: #f1fa8c;
         text-decoration: underline;
     }
 
-    .bp {
-        font-style: italic;
-    }
-
     .c,
     .ch,
     .cm,
@@ -131,7 +128,8 @@ $dt-yellow: #f1fa8c;
     .vc,
     .vg,
     .vi,
-    .vm {
+    .vm,
+    .bp {
         font-style: italic;
     }
 
