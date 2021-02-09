@@ -18,7 +18,7 @@ page_model = dom.HTML(
             dom.Button(onclick="alert('hello user')")(
                 "a button"
             ),
-            "in it"
+            "in it",
         )
     )
 )
