@@ -14,7 +14,6 @@
         </script>
         {% endif %}
         <meta charset="UTF-8">
-        <base href="https://starwort.github.io/computer-science/">
 
         {% seo %}
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,16 +43,6 @@
 
         <main id="content" class="main-content" role="main">
             {{ content }}
-
-            <footer class="site-footer">
-                <span class="site-footer-credits">
-                    {{ page.autodoc_footer | markdownify }}
-                    Currently viewing commit <a
-                       href="https://github.com/Starwort/computer-science/commit/{{ site.github.build_revision }}">
-                        {{ site.github.build_revision | truncate: 7, "" }}
-                    </a>
-                </span>
-            </footer>
         </main>
     </body>
 
