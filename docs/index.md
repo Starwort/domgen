@@ -1,6 +1,3 @@
----
-title: DOM Generator for Python
----
 # Domgen
 
 Domgen is a library which can be used to generate minified HTML, with rich custom component support and material design components as standard.
