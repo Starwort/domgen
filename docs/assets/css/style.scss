@@ -39,7 +39,9 @@ $dt-yellow: #f1fa8c;
 .highlight.highlight {
     background: $dt-gray-dark;
     color: $dt-gray-light;
-    font-style: normal;
+    * {
+        font-style: normal;
+    }
 
     .hll,
     .s,
