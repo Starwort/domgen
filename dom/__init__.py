@@ -3,6 +3,7 @@ from . import (
     components,
     forms,
     interactive_elements,
+    material_design,
     media,
     metadata,
     scripts,
@@ -13,4 +14,4 @@ from . import (
 )
 from .plain_elements import *
 
-__version__ = "0.1.2a"
+__version__ = "0.2.0a"

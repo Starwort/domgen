@@ -1,6 +1,8 @@
 from .base_classes import (
+    Attributes,
     Component,
     Container,
+    Content,
     Element,
     ElementGroup,
     TextElement,

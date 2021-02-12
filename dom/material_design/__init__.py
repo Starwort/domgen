@@ -2,7 +2,7 @@ import typing
 
 from .. import plain_elements as dom
 
-_INITIALISER_CSS_URLS = set()
+_INITIALISER_CSS_URLS = {"https://starwort.github.io/domgen/cdn/styles/common.css"}
 _FINALISER_JS_URLS = set()
 
 
@@ -22,24 +22,23 @@ def clear_component_cache():
     using Material elements.
     """
     _INITIALISER_CSS_URLS.clear()
+    _INITIALISER_CSS_URLS.add("https://starwort.github.io/domgen/cdn/styles/common.css")
     _FINALISER_JS_URLS.clear()
 
 
 class MDCInitialiser(dom.Component):
     """Place this in the head of your document to include the required CSS.
 
-    Takes keyword argument `theme` with a value of either `"dark"` (default)
-    or `"light"`.
+    Ensure that your page's `Body` element has a `theme` attribute set to
+    either `'light'` or `'dark'`.
 
     Expects no content, and as such any content passed will be ignored.
     """
 
-    __slots__ = ("theme_variant",)
-    theme_variant: typing.Literal["dark", "light"]
+    __slots__ = ()
 
     def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
-        self.theme_variant = attributes.get("theme", "dark")
-        extra_kws = set(attributes.keys()) - {"theme"}
+        extra_kws = set(attributes.keys())
         assert extra_kws == set(), "Unexpected keyword arguments passed: " + ", ".join(
             extra_kws
         )

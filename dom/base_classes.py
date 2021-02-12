@@ -3,8 +3,10 @@ import typing
 from abc import ABCMeta, abstractmethod
 from textwrap import indent
 
+Attributes = typing.Dict[str, typing.Any]
+Content = typing.List[typing.Union['Element', str]]
 
-def transform(attributes: typing.Dict[str, typing.Any]) -> typing.Dict[str, str]:
+def transform(attributes: Attributes) -> typing.Dict[str, str]:
     """Transform `attributes` for serialisation.
 
     `attributes` is not mutated; a new dictionary is returned.
@@ -74,18 +76,17 @@ class Element(metaclass=ABCMeta):
         """Return an HTML representation of the model"""
 
     @abstractmethod
-    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+    def set_content(self, content: Content) -> None:
         """Set content - called by __init__ and __call__"""
 
     @abstractmethod
-    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+    def apply_attributes(self, attributes: Attributes) -> None:
         """Apply attributes - called by __init__
 
         Guaranteed to be called before set_content"""
 
     def __str__(self) -> str:
         return self.serialise(minify=False)
-
 
 class TextElement(Element):
     __slots__ = ("content",)
@@ -95,7 +96,7 @@ class TextElement(Element):
         """Return an HTML representation of the model"""
         return self.content
 
-    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+    def set_content(self, content: Content) -> None:
         self.content = content[0]
         if not isinstance(self.content, str):
             raise TypeError(
@@ -110,7 +111,7 @@ class TextElement(Element):
                 )
             )
 
-    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+    def apply_attributes(self, attributes: Attributes) -> None:
         if attributes:
             raise TypeError("Text content cannot have attributes")
 
@@ -127,7 +128,7 @@ class Container(Element):
     __slots__ = ("tag", "content", "attributes")
     tag: str
     content: typing.List["Element"]
-    attributes: typing.Dict[str, typing.Any]
+    attributes: Attributes
 
     def serialise(self, minify: bool = True) -> str:
         """Return an HTML representation of the model"""
@@ -152,13 +153,13 @@ class Container(Element):
             + f"</{self.tag}>"
         )
 
-    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+    def set_content(self, content: Content) -> None:
         self.content = [
             child if isinstance(child, Element) else TextElement(child)
             for child in content
         ]
 
-    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+    def apply_attributes(self, attributes: Attributes) -> None:
         self.attributes = transform(attributes)
 
     def __repr__(self) -> str:
@@ -180,7 +181,7 @@ class Void(Element):
 
     __slots__ = ("tag", "attributes")
     tag: str
-    attributes: typing.Dict[str, typing.Any]
+    attributes: Attributes
 
     def serialise(self, minify: bool = True) -> str:
         """Return an HTML representation of the model"""
@@ -195,11 +196,11 @@ class Void(Element):
             + " />"
         )
 
-    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+    def set_content(self, content: Content) -> None:
         if content:
             raise TypeError("Void elements cannot have content")
 
-    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+    def apply_attributes(self, attributes: Attributes) -> None:
         self.attributes = transform(attributes)
 
     def __repr__(self) -> str:
@@ -217,13 +218,13 @@ class ElementGroup(Element):
     __slots__ = ("content",)
     content: typing.List[Element]
 
-    def set_content(self, content: typing.List[typing.Union["Element", str]]) -> None:
+    def set_content(self, content: Content) -> None:
         self.content = [
             child if isinstance(child, Element) else TextElement(child)
             for child in content
         ]
 
-    def apply_attributes(self, attributes: typing.Dict[str, typing.Any]) -> None:
+    def apply_attributes(self, attributes: Attributes) -> None:
         if attributes:
             raise TypeError("Element groups cannot have attributes")
 
