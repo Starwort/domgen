@@ -60,7 +60,7 @@ class _Standard(_AppBarBase):
                             "mdc-top-app-bar__section--align-end",
                         },
                         role="toolbar",
-                    )(**self.toolbar_buttons),
+                    )(*self.toolbar_buttons),
                 )
             ),
             self.navigation_drawer if self.navigation_drawer else "",
@@ -106,7 +106,7 @@ class _Short(_AppBarBase):
                             "mdc-top-app-bar__section--align-end",
                         },
                         role="toolbar",
-                    )(**self.toolbar_buttons),
+                    )(*self.toolbar_buttons),
                 )
             ),
             self.navigation_drawer if self.navigation_drawer else "",
@@ -141,7 +141,7 @@ class _Fixed(_AppBarBase):
                             "mdc-top-app-bar__section--align-end",
                         },
                         role="toolbar",
-                    )(**self.toolbar_buttons),
+                    )(*self.toolbar_buttons),
                 )
             ),
             self.navigation_drawer if self.navigation_drawer else "",
@@ -176,7 +176,7 @@ class _Prominent(_AppBarBase):
                             "mdc-top-app-bar__section--align-end",
                         },
                         role="toolbar",
-                    )(**self.toolbar_buttons),
+                    )(*self.toolbar_buttons),
                 )
             ),
             self.navigation_drawer if self.navigation_drawer else "",
@@ -211,7 +211,7 @@ class _Dense(_AppBarBase):
                             "mdc-top-app-bar__section--align-end",
                         },
                         role="toolbar",
-                    )(**self.toolbar_buttons),
+                    )(*self.toolbar_buttons),
                 )
             ),
             self.navigation_drawer if self.navigation_drawer else "",
@@ -263,7 +263,7 @@ class TopAppBar(dom.Component):
             "fixed": _Fixed,
             "prominent": _Prominent,
             "dense": _Dense,
-        }[attributes["variant"]](**attributes)
+        }[attributes.get("variant", "standard")](**attributes)
 
     def set_content(self, content: dom.Content) -> None:
         self.content.set_content(content)

@@ -15,6 +15,9 @@ def component_register(css_url: str, js_url: str) -> None:
     _FINALISER_JS_URLS.add(js_url)
 
 
+from .top_app_bar import MenuButton, TopAppBar
+
+
 def clear_component_cache():
     """Use this to clear the cache of used components.
 
