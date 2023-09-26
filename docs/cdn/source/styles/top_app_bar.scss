@@ -1,7 +1,0 @@
-@use "@material/top-app-bar/mdc-top-app-bar";
-@use "@material/top-app-bar";
-
-body[theme="dark"] .mdc-top-app-bar {
-    @include top-app-bar.ink-color(var(--mdc-theme-primary, #bb86fc));
-    @include top-app-bar.fill-color(var(--mdc-theme-surface, #1e1e1e));
-}

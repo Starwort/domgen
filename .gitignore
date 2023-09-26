@@ -2,5 +2,4 @@ pypi_config.py
 dist
 *.egg-info
 __pycache__
-node_modules
 .vscode
