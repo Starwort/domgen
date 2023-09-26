@@ -97,8 +97,7 @@ class TextElement(Element):
         return self.content
 
     def set_content(self, content: Content) -> None:
-        self.content = content[0]
-        if not isinstance(self.content, str):
+        if not isinstance(content[0], str):
             raise TypeError(
                 "Text content must be a single string (got {!r})".format(
                     type(self.content).__qualname__
@@ -110,6 +109,7 @@ class TextElement(Element):
                     len(content)
                 )
             )
+        self.content = content[0]
 
     def apply_attributes(self, attributes: Attributes) -> None:
         if attributes:
@@ -147,7 +147,7 @@ class Container(Element):
                     child.serialise(minify=minify) for child in self.content
                 ),
                 "    ",
-                lambda i: not minify,
+                lambda _: not minify,
             )
             + ("" if minify else "\n")
             + f"</{self.tag}>"
