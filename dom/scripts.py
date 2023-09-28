@@ -31,6 +31,8 @@ class NoScript(Container):
 class Script(Container):
     """The HTML `<script>` element is used to embed executable code or data;
     this is typically used to embed or refer to JavaScript code.
+
+    When used in SVG, `href` should be used instead of `src`.
     """
 
     __slots__ = ()

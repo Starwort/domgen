@@ -1,4 +1,5 @@
 import typing
+
 from . import (
     base_classes,
     components,
@@ -10,6 +11,7 @@ from . import (
     sectioning,
     semantics,
     short,
+    svg,
     tables,
 )
 from .plain_elements import *
@@ -55,4 +57,4 @@ def custom(
         return CustomContainer
 
 
-__version__ = "0.2.1a"
+__version__ = "0.3.0a"

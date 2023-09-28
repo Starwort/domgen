@@ -1,6 +1,6 @@
 import typing
 
-from .base_classes import Container, Void
+from .base_classes import Container, Element, Void
 
 
 class Area(Void):
@@ -80,7 +80,11 @@ Video = VideoPlayer
 
 
 class Image(Void):
-    """The HTML `<img>` element embeds an image into the document."""
+    """The HTML `<img>` element embeds an image into the document.
+
+    This is *not* the SVG element `<image>`, and using this element inside SVG
+    will therefore not work. If you're using SVG, you want `dom.svg.Image` or
+    `dom.SvgImage`."""
 
     __slots__ = ()
     tag = "img"
@@ -104,22 +108,21 @@ class ImageMap(Container):
 Map = ImageMap
 
 
-class Path(Void):
-    __slots__ = ()
-    tag = "path"
-
-
 class ScalableVectorGraphic(Container):
     __slots__ = ()
     tag = "svg"
 
+    def __init__(self, *content: Element, **attributes: typing.Any) -> None:
+        attributes.setdefault("xmlns", "http://www.w3.org/2000/svg")
+        view_box = attributes.pop("view_box", None)
+        if isinstance(view_box, (list, tuple)):
+            view_box = " ".join(str(x) for x in view_box)
+        if view_box is not None:
+            attributes["viewBox"] = view_box
+        super().__init__(*content, **attributes)
+
 
 SVG = ScalableVectorGraphic
-
-
-class Polygon(Container):
-    __slots__ = ()
-    tag = "polygon"
 
 
 class Track(Void):

@@ -4,16 +4,22 @@ from abc import ABCMeta, abstractmethod
 from textwrap import indent
 
 Attributes = typing.Dict[str, typing.Any]
-Content = typing.List[typing.Union['Element', str]]
+Content = typing.List[typing.Union["Element", str]]
+
 
 def transform(attributes: Attributes) -> typing.Dict[str, str]:
     """Transform `attributes` for serialisation.
 
-    `attributes` is not mutated; a new dictionary is returned.
+    `attributes` is not mutated aside from style and class normalisation;
+    a new dictionary is returned to be serialised.
 
     `classes`, if present, must be a `set` of classes to apply to the
     element. Empty strings will be removed from this set, so they are
     useable to toggle a class with a boolean.
+
+    `style`, if present, must be either a dictionary of CSS properties to their
+    values, or a string. If it is a dictionary, it will be auto-serialised to
+    minified CSS.
 
     Any attribute name with an underscore in it has its underscores
     transformed into hyphens (for ARIA, JavaScript `data-` attributes,
@@ -29,7 +35,19 @@ def transform(attributes: Attributes) -> typing.Dict[str, str]:
     classes = attributes.pop("classes", set())
     if classes:
         attributes["class"] = " ".join(classes - {""})
+    style = attributes.pop("style", "")
+    if style:
+        if isinstance(style, dict):
+            style = ";".join(key + ":" + value for key, value in style.items())
+        attributes["style"] = style
     for key, value in attributes.items():
+        # if both `*colour*` and `*color*` are provided, `*colour*` takes
+        # precedence
+        unnormalised_colour = (
+            key if key.startswith("data-") else key.replace("color", "colour")
+        )
+        if key != unnormalised_colour and unnormalised_colour in attributes:
+            continue
         if not isinstance(value, str):
             # convert value to a string containing JSON
             value = json.dumps(value)
@@ -42,6 +60,10 @@ def transform(attributes: Attributes) -> typing.Dict[str, str]:
         # replace double underscore with single underscore, and other
         # underscores with hyphens
         key = key.replace("__", " ").replace("_", "-").replace(" ", "_")
+        # allow global use of `colour` instead of `color`, but don't modify
+        # `data-*` attributes
+        if not key.startswith("data-"):
+            key = key.replace("colour", "color")
         new_attributes[key] = value
     return new_attributes
 
@@ -87,6 +109,7 @@ class Element(metaclass=ABCMeta):
 
     def __str__(self) -> str:
         return self.serialise(minify=False)
+
 
 class TextElement(Element):
     __slots__ = ("content",)

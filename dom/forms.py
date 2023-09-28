@@ -107,6 +107,7 @@ class ColourInput(Input):
 
 
 ColorInput = ColourInput
+Colour = ColourInput
 Color = ColourInput
 
 

@@ -4,7 +4,7 @@ from .base_classes import Container, Element, TextElement, Void
 
 
 class Anchor(Container):
-    """The HTML `<a>` element (or anchor element), with its `href`
+    """The HTML/SVG `<a>` element (or anchor element), with its `href`
     attribute, creates a hyperlink to web pages, files, email addresses,
     locations in the same page, or anything else a URL can address.
     """
