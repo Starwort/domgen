@@ -19,6 +19,8 @@ from .content import (
     Divider,
     Figure,
     FigureCaption,
+    ListItem,
+    Menu,
     OrderedList,
     Paragraph,
     PreformattedText,

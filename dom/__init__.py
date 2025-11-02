@@ -3,6 +3,7 @@ import typing
 from . import (
     base_classes,
     components,
+    content,
     forms,
     interactive_elements,
     media,

@@ -1,3 +1,9 @@
+"""Use HTML text content elements to organize blocks or sections of content
+placed between the opening `<body>` and closing `</body>` tags. Important for
+accessibility and SEO, these elements identify the purpose or structure of that
+content.
+"""
+
 from .base_classes import Container, Void
 
 
@@ -102,6 +108,33 @@ class Divider(Void):
 
 
 HR = Divider
+
+
+class ListItem(Container):
+    """The `<li>` HTML element is used to represent an item in a list. It must
+    be contained in a parent element: an ordered list (`<ol>`), an unordered
+    list (`<ul>`), or a menu (`<menu>`). In menus and unordered lists, list
+    items are usually displayed using bullet points. In ordered lists, they are
+    usually displayed with an ascending counter on the left, such as a number or
+    letter.
+    """
+
+    __slots__ = ()
+    tag = "li"
+
+
+LI = ListItem
+
+
+class Menu(Container):
+    """The `<menu>` HTML element is described in the HTML specification as a
+    semantic alternative to `<ul>`, but treated by browsers (and exposed through
+    the accessibility tree) as no different than `<ul>`. It represents an
+    unordered list of items (which are represented by `<li>` elements).
+    """
+
+    __slots__ = ()
+    tag = "li"
 
 
 class OrderedList(Container):

@@ -1,5 +1,20 @@
 from .components import Slot, Template
-from .content import DD, DL, DT, HR, OL, UL, BlockQuote, Div, FigCaption, Figure, P, Pre
+from .content import (
+    DD,
+    DL,
+    DT,
+    HR,
+    LI,
+    OL,
+    UL,
+    BlockQuote,
+    Div,
+    FigCaption,
+    Figure,
+    Menu,
+    P,
+    Pre,
+)
 from .forms import (
     URL,
     Button,
