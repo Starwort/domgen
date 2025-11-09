@@ -191,7 +191,8 @@ class Container(Element):
             + "("
             + ", ".join(repr(child) for child in self.content)
             + (", " if self.content and self.attributes else "")
-            + ", ".join(f"{k}={v!r}" for k, v in self.attributes.items())
+            # our attribute values are already quoted
+            + ", ".join(f"{k}={v}" for k, v in self.attributes.items())
             + ")"
         )
 
@@ -230,6 +231,7 @@ class Void(Element):
         return (
             self.__class__.__name__
             + "("
+            # our attribute values are already quoted
             + ", ".join(f"{k}={v}" for k, v in self.attributes.items())
             + ")"
         )
@@ -251,7 +253,7 @@ class ElementGroup(Element):
         if attributes:
             raise TypeError("Element groups cannot have attributes")
 
-    def serialise(self, minify: bool) -> str:
+    def serialise(self, minify: bool = True) -> str:
         return ("" if minify else "\n").join(
             child.serialise(minify=minify) for child in self.content
         )
